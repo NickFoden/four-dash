@@ -1,23 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React,{ useEffect, useState} from 'react';
+import Graph from "./components/Graph"
+import Transactions from "./components/Transactions"
+import {fetchApi} from "./api"
 
 function App() {
+  const [currentState, setState] = useState({loading: false, data:[]})
+  
+  useEffect(() => {
+    setState({loading: true, data: null})
+    fetchApi().then(
+     result => {
+        setState({loading: false, data:result})
+      },
+      error => {
+        setState({loading: false, })
+      },
+    )
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div >
+      <header >
+        <h1>Transactions for the past 7 days</h1>
+<Graph/>
+<Transactions/>
       </header>
     </div>
   );
